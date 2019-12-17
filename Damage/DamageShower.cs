@@ -11,15 +11,14 @@ namespace DamageShower
     public class DamageShower : RocketPlugin
     {
         public static string version = "1.0.0";
-        public static string maker = "[RAR] Metshival";
         public static DamageShower Instance;
         public List<string> damage = new List<string>();
 
         protected override void Load()
         {
             Instance = this;
-            Logger.Log("This Plugin was made by: " + maker);
-            Logger.Log("Version: " + version);
+            Logger.Log("This Plugin was made by: [RAR] Metshival", ConsoleColor.Green);
+            Logger.Log("Version: " + version, ConsoleColor.Green);
             DamageTool.damagePlayerRequested += UnturnedEvents_OnPlayerDamaged;
         }
 
@@ -33,10 +32,10 @@ namespace DamageShower
                 {
 
                     PlayerEquipment pe = killer.Player.equipment;
-                    Item item = killer.Inventory.getItem(pe.equippedPage, player.Inventory.getIndex(pe.equippedPage, pe.equipped_x, pe.equipped_y)).item;
-                    UnturnedChat.Say(killer, "Damage done: " + (pars.damage * pars.times) + ", Damaged Limb: " + LimbToName(pars.limb) + " and Weapon ID: " + item.id);
+                    ItemJar item = killer.Inventory.getItem(pe.equippedPage, player.Inventory.getIndex(pe.equippedPage, pe.equipped_x, pe.equipped_y));
+                    UnturnedChat.Say(killer, string.Format("Damage: {0}, Limb: {1}, and Weapon: {2} ({3})", (pars.damage * pars.times), LimbToName(pars.limb), item.interactableItem.asset.itemName, item.item.id));
                     canDamage = false;
-
+                    return;
                 }
             }
             catch (Exception) { }
@@ -47,27 +46,27 @@ namespace DamageShower
             string Part = "???";
             if (limb == ELimb.SKULL)
             {
-                Part = ("head");
+                Part = ("Head");
             }
             else if (limb == ELimb.SPINE)
             {
-                Part = ("body");
+                Part = ("Body");
             }
             else if (limb == ELimb.LEFT_ARM || limb == ELimb.RIGHT_ARM || limb == ELimb.LEFT_HAND || limb == ELimb.RIGHT_HAND)
             {
-                Part = ("arm");
+                Part = ("Arm");
             }
             else if (limb == ELimb.LEFT_LEG || limb == ELimb.RIGHT_LEG || limb == ELimb.LEFT_FOOT || limb == ELimb.RIGHT_FOOT)
             {
-                Part = ("leg");
+                Part = ("Leg");
             }
             return Part;
         }
 
         protected override void Unload()
         {
-            Logger.Log("This Plugin was made by: " + maker);
-            Logger.Log("Version: " + version);
+            Logger.Log("This Plugin was made by: [RAR] Metshival", ConsoleColor.Green);
+            Logger.Log("Version: " + version, ConsoleColor.Green);
             DamageTool.damagePlayerRequested -= UnturnedEvents_OnPlayerDamaged;
         }
     }
