@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamageShower", "Damage\DamageShower.csproj", "{950B4D81-F1D4-4C4D-8936-C1EF2F1CC60B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamageShower", "DamageShower.csproj", "{950B4D81-F1D4-4C4D-8936-C1EF2F1CC60B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
