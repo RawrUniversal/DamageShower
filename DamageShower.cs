@@ -1,7 +1,7 @@
-﻿using Rocket.Core.Plugins;
+using Rocket.Core.Plugins;
 using Rocket.Unturned.Chat;
-using Rocket.Unturned.Player;
 using SDG.Unturned;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using Logger = Rocket.Core.Logging.Logger;
@@ -12,6 +12,7 @@ namespace DamageShower
     {
         public static DamageShower Instance;
         public List<string> damage = new List<string>();
+        static string Fist(ItemJar jar) => jar == null ? "0 AKA Fist" : jar.item.id.ToString();
 
         protected override void Load()
         {
@@ -25,12 +26,17 @@ namespace DamageShower
         {
             try
             {
-                Player killer = PlayerTool.getPlayer(pars.killer);
-                if (damage.Contains(pars.killer.m_SteamID))
+                if (pars.killer != CSteamID.Nil)
                 {
-                    ItemJar item = killer.inventory.getItem(killer.equipment.equippedPage, killer.inventory.getIndex(killer.equipment.equippedPage, killer.equipment.equipped_x, killer.equipment.equipped_y));
-                    UnturnedChat.Say(pars.killer, string.Format("Damage: {0}, Limb: {1}, and Weapon ID: {2}", pars.damage * pars.times, LimbToName(pars.limb), item.item.id));
-                    canDamage = false;
+                    Player killer = PlayerTool.getPlayer(pars.killer);
+                    if (damage.Contains(pars.killer.m_SteamID))
+                    {
+                        ItemJar item = null;
+                        if (killer.equipment.isEquipped)
+                            item = killer.inventory.getItem(killer.equipment.equippedPage, killer.inventory.getIndex(killer.equipment.equippedPage, killer.equipment.equipped_x, killer.equipment.equipped_y));
+                        UnturnedChat.Say(pars.killer, string.Format("Damage: {0}, Limb: {1}, and Weapon ID: {2}", pars.damage * pars.times, LimbToName(pars.limb), Fist(item)));
+                        canDamage = false;
+                    }
                 }
             }
             catch
