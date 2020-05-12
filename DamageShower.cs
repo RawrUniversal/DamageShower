@@ -10,7 +10,6 @@ namespace DamageShower
 {
     public class DamageShower : RocketPlugin
     {
-        public static string version = "1.0.0";
         public static DamageShower Instance;
         public List<string> damage = new List<string>();
 
@@ -18,27 +17,25 @@ namespace DamageShower
         {
             Instance = this;
             Logger.Log("This Plugin was made by: [RAR] Metshival", ConsoleColor.Green);
-            Logger.Log("Version: " + version, ConsoleColor.Green);
-            DamageTool.damagePlayerRequested += UnturnedEvents_OnPlayerDamaged;
+            Logger.Log("Version: 1.0.0" + version, ConsoleColor.Green);
+            DamageTool.damagePlayerRequested += DamageTool_damagePlayerRequested;
         }
 
-        private void UnturnedEvents_OnPlayerDamaged(ref DamagePlayerParameters pars, ref bool canDamage)
+        private void DamageTool_damagePlayerRequested(ref DamagePlayerParameters pars, ref bool canDamage)
         {
             try
             {
-                UnturnedPlayer player = UnturnedPlayer.FromPlayer(pars.player);
-                UnturnedPlayer killer = UnturnedPlayer.FromCSteamID(pars.killer);
-                if (damage.Contains(killer.Id))
+                Player killer = PlayerTool.getPlayer(pars.killer);
+                if (damage.Contains(pars.killer.m_SteamID))
                 {
-
-                    PlayerEquipment pe = killer.Player.equipment;
-                    ItemJar item = killer.Inventory.getItem(pe.equippedPage, player.Inventory.getIndex(pe.equippedPage, pe.equipped_x, pe.equipped_y));
-                    UnturnedChat.Say(killer, string.Format("Damage: {0}, Limb: {1}, and Weapon: {2} ({3})", (pars.damage * pars.times), LimbToName(pars.limb), item.interactableItem.asset.itemName, item.item.id));
+                    ItemJar item = killer.inventory.getItem(killer.equipment.equippedPage, killer.inventory.getIndex(killer.equipment.equippedPage, killer.equipment.equipped_x, killer.equipment.equipped_y));
+                    UnturnedChat.Say(pars.killer, string.Format("Damage: {0}, Limb: {1}, and Weapon ID: {2}", pars.damage * pars.times, LimbToName(pars.limb), item.item.id));
                     canDamage = false;
-                    return;
                 }
             }
-            catch (Exception) { }
+            catch
+            {
+            }
         }
 
         public string LimbToName(ELimb limb)
@@ -66,8 +63,8 @@ namespace DamageShower
         protected override void Unload()
         {
             Logger.Log("This Plugin was made by: [RAR] Metshival", ConsoleColor.Green);
-            Logger.Log("Version: " + version, ConsoleColor.Green);
-            DamageTool.damagePlayerRequested -= UnturnedEvents_OnPlayerDamaged;
+            Logger.Log("Version: 1.0.0", ConsoleColor.Green);
+            DamageTool.damagePlayerRequested -= DamageTool_damagePlayerRequested;
         }
     }
 }
