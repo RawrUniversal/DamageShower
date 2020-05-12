@@ -18,7 +18,7 @@ namespace DamageShower
         {
             Instance = this;
             Logger.Log("This Plugin was made by: [RAR] Metshival", ConsoleColor.Green);
-            Logger.Log("Version: 1.0.0" + version, ConsoleColor.Green);
+            Logger.Log("Version: 1.0.0", ConsoleColor.Green);
             DamageTool.damagePlayerRequested += DamageTool_damagePlayerRequested;
         }
 
