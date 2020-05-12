@@ -11,7 +11,7 @@ namespace DamageShower
     public class DamageShower : RocketPlugin
     {
         public static DamageShower Instance;
-        public List<string> damage = new List<string>();
+        public List<ulong> damage = new List<ulong>();
         static string Fist(ItemJar jar) => jar == null ? "0 AKA Fist" : jar.item.id.ToString();
 
         protected override void Load()
