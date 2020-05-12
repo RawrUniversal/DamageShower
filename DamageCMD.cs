@@ -58,13 +58,13 @@ namespace DamageShower
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer p = (UnturnedPlayer)caller;
-            if (DamageShower.Instance.damage.Contains(p.Id))
+            if (DamageShower.Instance.damage.Contains(p.CSteamID.m_SteamID))
             {
-                DamageShower.Instance.damage.Remove(p.Id);
+                DamageShower.Instance.damage.Remove(p.CSteamID.m_SteamID);
                 UnturnedChat.Say(p, "Damage measurement removed!");
             } else
             {
-                DamageShower.Instance.damage.Add(p.Id);
+                DamageShower.Instance.damage.Add(p.CSteamID.m_SteamID);
                 UnturnedChat.Say(p, "Damage measurement added!");
             }
             return;
