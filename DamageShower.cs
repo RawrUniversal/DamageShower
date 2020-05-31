@@ -1,5 +1,7 @@
+using Rocket.API;
 using Rocket.Core.Plugins;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -12,7 +14,7 @@ namespace DamageShower
     {
         public static DamageShower Instance;
         public List<ulong> damage = new List<ulong>();
-        static string Fist(ItemJar jar) => jar == null ? "0 AKA Fist" : jar.item.id.ToString();
+        static string Fist(ItemJar jar) => jar == null ? "Fist" : jar.item.id.ToString();
 
         protected override void Load()
         {
@@ -71,6 +73,72 @@ namespace DamageShower
             Logger.Log("This Plugin was made by: [RAR] Metshival", ConsoleColor.Green);
             Logger.Log("Version: 1.0.0", ConsoleColor.Green);
             DamageTool.damagePlayerRequested -= DamageTool_damagePlayerRequested;
+        }
+    }
+    public class DamageCMD : IRocketCommand
+    {
+        public List<string> Permissions
+        {
+            get
+            {
+                return new List<string>() { "damage.show" };
+            }
+        }
+
+        public AllowedCaller AllowedCaller
+        {
+            get
+            {
+                return AllowedCaller.Player;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "damage";
+            }
+        }
+
+        public string Syntax
+        {
+            get
+            {
+                return "";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Damage measurement Command";
+            }
+        }
+
+        public List<string> Aliases
+        {
+            get
+            {
+                return new List<string>();
+            }
+        }
+
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer p = (UnturnedPlayer)caller;
+            if (DamageShower.Instance.damage.Contains(p.CSteamID.m_SteamID))
+            {
+                DamageShower.Instance.damage.Remove(p.CSteamID.m_SteamID);
+                UnturnedChat.Say(p, "Damage measurement removed!");
+            }
+            else
+            {
+                DamageShower.Instance.damage.Add(p.CSteamID.m_SteamID);
+                UnturnedChat.Say(p, "Damage measurement added!");
+            }
+            return;
         }
     }
 }
