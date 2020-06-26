@@ -14,7 +14,7 @@ namespace DamageShower
     {
         public static DamageShower Instance;
         public List<ulong> damage = new List<ulong>();
-        static string Fist(ItemJar jar) => jar == null ? "Fist" : jar.item.id.ToString();
+        static string Fist(ItemJar jar) => jar == null ? "0 (Fist)" : jar.item.id.ToString();
 
         protected override void Load()
         {
@@ -28,17 +28,14 @@ namespace DamageShower
         {
             try
             {
-                if (pars.killer != CSteamID.Nil)
+                Player killer = PlayerTool.getPlayer(pars.killer);
+                if (damage.Contains(pars.killer.m_SteamID))
                 {
-                    Player killer = PlayerTool.getPlayer(pars.killer);
-                    if (damage.Contains(pars.killer.m_SteamID))
-                    {
-                        ItemJar item = null;
-                        if (killer.equipment.isEquipped)
-                            item = killer.inventory.getItem(killer.equipment.equippedPage, killer.inventory.getIndex(killer.equipment.equippedPage, killer.equipment.equipped_x, killer.equipment.equipped_y));
-                        UnturnedChat.Say(pars.killer, string.Format("Damage: {0}, Limb: {1}, and Weapon ID: {2}", pars.damage * pars.times, LimbToName(pars.limb), Fist(item)));
-                        canDamage = false;
-                    }
+                    ItemJar item = null;
+                    if (killer.equipment.useable != null)
+                        item = killer.inventory.getItem(killer.equipment.equippedPage, killer.inventory.getIndex(killer.equipment.equippedPage, killer.equipment.equipped_x, killer.equipment.equipped_y));
+                    UnturnedChat.Say(pars.killer, string.Format("Damage: {0}, Limb: {1}, and Weapon ID: {2}", System.Math.Round(pars.damage * pars.times), LimbToName(pars.limb), Fist(item)));
+                    canDamage = false;
                 }
             }
             catch
